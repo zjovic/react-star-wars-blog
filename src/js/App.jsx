@@ -21,7 +21,9 @@ const App = () => {
 
 	useEffect(() => {
         if(initialLoad) {
-            actions.loadPlanets();
+            actions.getPlanets();
+            actions.getStarships();
+            actions.getCharacters();
 			setInitialLoad(false);
         }
     }, []);
