@@ -9,14 +9,12 @@ import { Navbar } from "./component/navbar";
 const App = () => {
 	const basename = process.env.BASENAME || "";
 
-	const { store, actions } = useContext(Context);
+	const { actions } = useContext(Context);
 
 	useEffect(async () => {
-        if (store.planets.length === 0 || store.characters.length === 0 || store.starships.length === 0) {
-			actions.setLoading(true);
-			await actions.fetchData();
-			actions.setLoading(false);
-        }
+		actions.setLoading(true);
+		await Promise.all([actions.fetchPlanets(), actions.fetchCharacters(), actions.fetchStarships()])
+		actions.setLoading(false);
     }, []);
 
 	return (

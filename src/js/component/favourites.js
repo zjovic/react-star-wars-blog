@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
 import { Context } from '../store/appContext';
-import TrashIcon from '../component/trash-icon.js';
 
 const Favourites = () =>{
-    const { store, actions } = useContext(Context)
+    const { store, actions } = useContext(Context);
+
+    const handleRemoveFavourite = (id) => {
+		actions.removeFavourite(id);
+	}
     
     return(
         <div className="dropdown">
@@ -15,14 +17,16 @@ const Favourites = () =>{
                 {
                     store.favourites?.length > 0
                     ?
-                    store.favourites.map((favourite)=>{
-                        return <li key={favourite.uid} className="dropdown-item ">
-                            <Link className="text-decoration-none" to={favourite.url} >{favourite.name}</Link>
-                            <span className="float-end ms-2" type="button" onClick={() => actions.delete(favourite.uid)}><TrashIcon /></span>
-                        </li>
+                    store.favourites.map((favourite, index) => {
+                        return (
+                            <li key={index} className="dropdown-item ">
+                                <a href={favourite.url} className="text-decoration-none">{favourite.name}</a>
+                                <span className="float-end ms-2" type="button" onClick={() => handleRemoveFavourite(favourite.uid)}>X</span>
+                            </li>
+                        )
                     })
                     :
-                    <li className="text-center">(empty)</li>
+                    <li className="text-center">Poof... nothing here</li>
                 }
             </ul>
         </div>

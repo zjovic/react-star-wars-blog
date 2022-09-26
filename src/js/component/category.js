@@ -14,6 +14,10 @@ const Category = ({ category, id }) => {
 		actions.addToFavourites(item);
 	}
 
+    const isFavorited = (id) => {
+        return store.favourites.some(( item ) => item.uid === id);
+    }
+
     let data;
 
     if (category === 'Planets') {
@@ -41,7 +45,11 @@ const Category = ({ category, id }) => {
                                     <Link to={`/item/${category}/${item.uid}`}>
                                         <button className="btn btn-primary">Details</button>
                                     </Link>
-                                    <span onClick={() => handleAddToFavourites(item)}><FavouriteIcon /></span>
+                                    {
+                                        isFavorited(item.uid) ?
+                                            <span><FavouriteIcon full={true} /></span> :
+                                            <span onClick={() => handleAddToFavourites(item)}><FavouriteIcon full={false}/></span>
+                                    }
                                 </div>
                             </div>
                         </div>
