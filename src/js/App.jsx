@@ -1,30 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-
 import { Home } from "./views/Home.jsx";
-import { Planet } from "./views/Planet.jsx";
+import { Item } from "./views/Item.jsx";
 import injectContext, { Context } from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 
-
-
-//create your first component
 const App = () => {
-	// the basename is used when your project is published in a subdirectory and not in the root of the domain
-	// you can set the basename on the .env file located at the root of this project, E.g: BASENAME=/react-hello-webapp/
 	const basename = process.env.BASENAME || "";
 
 	const { store, actions } = useContext(Context);
 
-	const [initialLoad, setInitialLoad] = useState(true);
-
-	useEffect(() => {
-        if(initialLoad) {
-            actions.getPlanets();
-            actions.getStarships();
-            actions.getCharacters();
-			setInitialLoad(false);
+	useEffect(async () => {
+        if (store.planets.length === 0 || store.characters.length === 0 || store.starships.length === 0) {
+			actions.setLoading(true);
+			await actions.fetchData();
+			actions.setLoading(false);
         }
     }, []);
 
@@ -39,8 +30,8 @@ const App = () => {
 						<Route exact path="/home">
 							<Home />
 						</Route>
-						<Route exact path="/planet/:id">
-							<Planet />
+						<Route exact path="/:item/:category/:id">
+							<Item />
 						</Route>
 						<Route>
 							<h1>Not found!</h1>
